@@ -1,0 +1,2484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>百元培育型 21 天打卡计划 - 原型方案</title>
+  <style>
+    :root {
+      --bg: #f5efe6;
+      --paper: rgba(255, 251, 246, 0.9);
+      --ink: #1d160f;
+      --muted: #695d52;
+      --line: rgba(62, 39, 22, 0.12);
+      --accent: #d1643c;
+      --accent-deep: #8f3920;
+      --accent-soft: #f5d7bf;
+      --gold: #f0c36b;
+      --green: #3e7b5c;
+      --green-soft: #dbeee3;
+      --blue-soft: #d9e8f8;
+      --shadow: 0 20px 50px rgba(72, 45, 24, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --content-width: 1460px;
+      --font-display: "Georgia", "Times New Roman", serif;
+      --font-ui: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-ui);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 223, 191, 0.95), transparent 28%),
+        radial-gradient(circle at 85% 10%, rgba(240, 195, 107, 0.35), transparent 18%),
+        linear-gradient(180deg, #fbf6ef 0%, #f3eadf 100%);
+      min-height: 100vh;
+    }
+
+    .page-shell {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 28px 24px 72px;
+      position: relative;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 26px;
+      margin-bottom: 26px;
+    }
+
+    .hero-card,
+    .hero-side,
+    .panel,
+    .prototype-card,
+    .admin-card,
+    .modal-card,
+    .timeline,
+    .data-card,
+    .metric {
+      background: var(--paper);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      border-radius: 38px;
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -30px -40px auto;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(209, 100, 60, 0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(209, 100, 60, 0.1);
+      color: var(--accent-deep);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-family: var(--font-display);
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .meta-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #fff6ee;
+      border: 1px solid rgba(209, 100, 60, 0.16);
+      font-size: 13px;
+      color: var(--accent-deep);
+      font-weight: 600;
+    }
+
+    .hero-side {
+      border-radius: 34px;
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 22px;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 30px;
+      margin-bottom: 6px;
+      color: var(--accent-deep);
+      font-family: var(--font-display);
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 18px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      border-radius: 28px;
+      padding: 22px;
+    }
+
+    .panel h2,
+    .section-head h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .panel p,
+    .panel li,
+    .section-head p,
+    .data-card p,
+    .prototype-card p,
+    .admin-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .toc {
+      display: grid;
+      gap: 8px;
+    }
+
+    .toc a {
+      text-decoration: none;
+      color: var(--ink);
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid transparent;
+      transition: 160ms ease;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .toc a:hover {
+      transform: translateX(4px);
+      border-color: rgba(209, 100, 60, 0.2);
+      color: var(--accent-deep);
+    }
+
+    .toc a.active {
+      background: linear-gradient(135deg, #fff0e1, #fff9f3);
+      border-color: rgba(209, 100, 60, 0.26);
+      color: var(--accent-deep);
+      box-shadow: inset 0 0 0 1px rgba(209, 100, 60, 0.08);
+    }
+
+    .stack {
+      display: grid;
+      gap: 24px;
+    }
+
+    .section {
+      display: grid;
+      gap: 18px;
+      scroll-margin-top: 18px;
+    }
+
+    .section.is-active .section-head h2 {
+      color: var(--accent-deep);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+    }
+
+    .section-head h2 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .section-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 700;
+      color: var(--accent-deep);
+    }
+
+    .tag-row,
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag,
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tag {
+      background: #fff4e8;
+      color: var(--accent-deep);
+      border: 1px solid rgba(209, 100, 60, 0.12);
+    }
+
+    .chip {
+      background: #fff;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    .prototype-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .prototype-card,
+    .admin-card,
+    .modal-card,
+    .timeline,
+    .data-card {
+      border-radius: 28px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .phone-frame {
+      border-radius: 28px;
+      background: linear-gradient(180deg, #3b2d22 0%, #1f1812 100%);
+      padding: 12px;
+      max-width: 380px;
+      margin: 0 auto;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .phone-screen {
+      border-radius: 22px;
+      min-height: 720px;
+      background: linear-gradient(180deg, #fff9f2 0%, #f6ecdf 100%);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .task-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 720px;
+    }
+
+    .task-scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 6px;
+      padding-bottom: 112px;
+      display: grid;
+      align-content: start;
+      gap: 0;
+      scrollbar-width: thin;
+    }
+
+    .task-scroll-area::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .task-scroll-area::-webkit-scrollbar-thumb {
+      background: rgba(96, 66, 42, 0.18);
+      border-radius: 999px;
+    }
+
+    .floating-action-bar {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(255, 249, 242, 0.94);
+      border: 1px solid rgba(96, 66, 42, 0.08);
+      box-shadow: 0 18px 28px rgba(97, 63, 37, 0.14);
+      z-index: 4;
+    }
+
+    .screen-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--muted);
+    }
+
+    .banner {
+      border-radius: 24px;
+      padding: 18px;
+      color: #fff8f1;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,0.22), transparent 24%),
+        linear-gradient(135deg, #b34729 0%, #d97743 50%, #f0b15b 100%);
+      box-shadow: 0 18px 32px rgba(176, 80, 40, 0.28);
+    }
+
+    .banner-topbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .banner-link {
+      border: 0;
+      background: transparent;
+      color: rgba(255, 248, 241, 0.84);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .banner-link:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    .banner h3,
+    .quote-poster h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      font-family: var(--font-display);
+    }
+
+    .banner p {
+      color: rgba(255, 250, 245, 0.82);
+      margin-bottom: 14px;
+    }
+
+    .progress-card,
+    .mini-card,
+    .qa-card,
+    .gift-card,
+    .result-card {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(96, 66, 42, 0.08);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .progress-card {
+      margin-top: 14px;
+    }
+
+    .home-focus-card {
+      margin-top: 14px;
+      display: grid;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(96, 66, 42, 0.08);
+      border-radius: 24px;
+      padding: 16px;
+    }
+
+    .today-content-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fff6ee, #f7e7d5);
+      border: 1px solid rgba(209, 100, 60, 0.12);
+    }
+
+    .today-content-card strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .gift-track {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 0 2px;
+    }
+
+    .gift-node {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      min-width: 56px;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .gift-node::before {
+      content: "";
+      position: absolute;
+      top: 16px;
+      left: -36px;
+      width: 72px;
+      height: 3px;
+      background: #eadfce;
+      z-index: 0;
+    }
+
+    .gift-node:first-child::before {
+      display: none;
+    }
+
+    .gift-icon {
+      position: relative;
+      z-index: 1;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid rgba(96, 66, 42, 0.1);
+      box-shadow: 0 8px 16px rgba(114, 77, 41, 0.08);
+      font-size: 16px;
+    }
+
+    .gift-node.unlocked .gift-icon {
+      background: linear-gradient(135deg, #ffe8bf, #f0b15b);
+      border-color: rgba(209, 100, 60, 0.12);
+    }
+
+    .gift-node.current .gift-icon {
+      box-shadow: 0 0 0 4px rgba(201, 87, 52, 0.12);
+      border: 2px solid #ca6039;
+    }
+
+    .gift-node.unlocked::before,
+    .gift-node.current::before {
+      background: linear-gradient(90deg, #d57a42, #f0b15b);
+    }
+
+    .floating-consultant {
+      position: absolute;
+      right: 16px;
+      bottom: 18px;
+      width: 74px;
+      min-height: 74px;
+      border-radius: 22px;
+      padding: 10px 8px;
+      background: linear-gradient(180deg, rgba(255,249,242,0.96), rgba(244,226,203,0.96));
+      border: 1px solid rgba(209, 100, 60, 0.16);
+      box-shadow: 0 14px 28px rgba(102, 63, 35, 0.18);
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 6px;
+      text-align: center;
+      color: var(--accent-deep);
+      font-size: 11px;
+      font-weight: 800;
+      z-index: 3;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .floating-consultant:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 30px rgba(102, 63, 35, 0.22);
+    }
+
+    .floating-consultant .qr-chip {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #fff, #f1ddc2);
+      font-size: 18px;
+    }
+
+    .home-clickable {
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .home-clickable:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 24px rgba(98, 62, 35, 0.12);
+    }
+
+    .progress-head,
+    .row-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-bar {
+      margin-top: 12px;
+      height: 10px;
+      border-radius: 999px;
+      background: #f1e4d7;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 62%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #c95734, #f0b15b);
+    }
+
+    .day-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .day {
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+      background: #fff;
+      border: 1px solid rgba(96, 66, 42, 0.08);
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .day:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(114, 77, 41, 0.12);
+    }
+
+    .day.selected {
+      border: 2px solid #ca6039;
+      box-shadow: 0 0 0 4px rgba(201, 87, 52, 0.12);
+    }
+
+    .day.done {
+      color: #fff;
+      background: linear-gradient(135deg, #ca6039, #e6a252);
+      border-color: transparent;
+    }
+
+    .day.today {
+      border: 2px solid #ca6039;
+      color: #ca6039;
+    }
+
+    .section-label {
+      margin: 16px 0 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .task-list,
+    .option-list,
+    .benefit-list,
+    .bullet-list,
+    .step-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .task-item,
+    .option,
+    .benefit-item,
+    .bullet,
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(96, 66, 42, 0.08);
+    }
+
+    .task-icon,
+    .bullet-index,
+    .step-index {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .task-icon {
+      background: #fff0e4;
+      color: var(--accent-deep);
+    }
+
+    .bullet-index,
+    .step-index {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .option input[type="radio"],
+    .option input[type="checkbox"] {
+      accent-color: #c95734;
+      margin-top: 3px;
+    }
+
+    .option-body strong,
+    .task-body strong,
+    .benefit-body strong,
+    .bullet-body strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .text-input {
+      width: 100%;
+      border: 1px solid rgba(96, 66, 42, 0.12);
+      background: #fffefb;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, #b94224, #d46338);
+      box-shadow: 0 12px 20px rgba(188, 76, 45, 0.22);
+    }
+
+    .btn-secondary {
+      color: var(--accent-deep);
+      background: #fff1e5;
+      border: 1px solid rgba(209, 100, 60, 0.16);
+    }
+
+    .photo-box {
+      margin-top: 12px;
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px dashed rgba(96, 66, 42, 0.2);
+      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(248,239,229,0.9));
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .poster-preview {
+      display: grid;
+      place-items: center;
+      min-height: 720px;
+      background:
+        radial-gradient(circle at top left, rgba(240,195,107,0.22), transparent 26%),
+        linear-gradient(180deg, #f7ead6 0%, #f2dfc6 100%);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .quote-poster {
+      width: 100%;
+      max-width: 340px;
+      min-height: 590px;
+      border-radius: 30px;
+      padding: 24px;
+      color: #fff9f3;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,0.16), transparent 28%),
+        linear-gradient(180deg, #5e2c1d 0%, #a14c2f 48%, #dd9654 100%);
+      box-shadow: 0 24px 44px rgba(104, 51, 29, 0.26);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .quote-copy {
+      font-family: var(--font-display);
+      font-size: 30px;
+      line-height: 1.35;
+      letter-spacing: -0.04em;
+      margin: 18px 0;
+    }
+
+    .poster-footer {
+      display: grid;
+      gap: 12px;
+    }
+
+    .poster-book {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .book-cover {
+      width: 56px;
+      height: 74px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #f2d9b7, #cf8451);
+      flex: 0 0 auto;
+    }
+
+    .benefit-item.locked {
+      opacity: 0.6;
+      background: linear-gradient(180deg, #f4eee7, #efe5da);
+    }
+
+    .benefit-item.is-clickable {
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+    }
+
+    .benefit-item.is-clickable:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 26px rgba(114, 77, 41, 0.12);
+    }
+
+    .benefit-item.unlocked-highlight {
+      background: linear-gradient(180deg, #fff6ea, #fffdf8);
+      border-color: rgba(209, 100, 60, 0.18);
+    }
+
+    .benefit-badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .benefit-badge.locked {
+      background: #ece5db;
+      color: #8d7f71;
+    }
+
+    .result-score {
+      font-family: var(--font-display);
+      font-size: 54px;
+      line-height: 1;
+      color: var(--accent-deep);
+      margin: 8px 0 4px;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+    }
+
+    .admin-card {
+      min-height: 520px;
+    }
+
+    .admin-shell {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 16px;
+      min-height: 460px;
+    }
+
+    .admin-nav {
+      border-radius: 22px;
+      background: linear-gradient(180deg, #231a14 0%, #3a2c22 100%);
+      color: #fdf4eb;
+      padding: 18px;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+    }
+
+    .admin-nav .nav-item {
+      padding: 11px 12px;
+      border-radius: 14px;
+      font-size: 14px;
+      color: rgba(255,249,243,0.8);
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .admin-nav .nav-item.active {
+      color: #fff;
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .admin-main {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .admin-panel-view {
+      display: none;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .admin-panel-view.active {
+      display: grid;
+    }
+
+    .admin-toolbar,
+    .form-grid,
+    .table-like,
+    .config-list {
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(96,66,42,0.08);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .field .mock-input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      border: 1px solid rgba(96,66,42,0.12);
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 14px;
+      min-height: 44px;
+      color: var(--ink);
+    }
+
+    .field textarea {
+      min-height: 92px;
+      resize: none;
+      font-family: inherit;
+    }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 84px 1.2fr 100px 110px 120px;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(96,66,42,0.08);
+      font-size: 13px;
+      color: var(--muted);
+      align-items: center;
+    }
+
+    .table-row:last-child {
+      border-bottom: 0;
+    }
+
+    .table-row strong {
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .data-card ul,
+    .panel ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .legend span {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #fff7ef;
+      border: 1px solid rgba(209,100,60,0.12);
+      color: var(--accent-deep);
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .demo-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .demo-button {
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(209, 100, 60, 0.14);
+      background: #fff8f0;
+      color: var(--accent-deep);
+      border-radius: 16px;
+      padding: 13px 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .demo-button:hover {
+      transform: translateX(3px);
+      background: #fff2e4;
+    }
+
+    .phone-frame.focus-ring {
+      box-shadow: 0 0 0 6px rgba(209, 100, 60, 0.14), inset 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .pulse-once {
+      animation: pulseOnce 680ms ease;
+    }
+
+    @keyframes pulseOnce {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.015); }
+      100% { transform: scale(1); }
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      max-width: 320px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      color: #fffaf4;
+      background: linear-gradient(135deg, #653221, #cb6b3e);
+      box-shadow: 0 22px 36px rgba(88, 42, 26, 0.24);
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+      z-index: 40;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .rule-drawer {
+      position: fixed;
+      inset: 0;
+      background: rgba(29, 22, 15, 0.38);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50;
+    }
+
+    .rule-drawer.open {
+      display: flex;
+    }
+
+    .rule-card {
+      width: min(560px, 100%);
+      border-radius: 30px;
+      background: linear-gradient(180deg, #fffaf4, #f7eee4);
+      padding: 24px;
+      box-shadow: 0 30px 60px rgba(58, 34, 20, 0.22);
+    }
+
+    .rule-card h3 {
+      margin: 0 0 10px;
+      font-size: 26px;
+      font-family: var(--font-display);
+      color: var(--accent-deep);
+    }
+
+    .rule-card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .status-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(96, 66, 42, 0.08);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .status-strip strong {
+      color: var(--accent-deep);
+    }
+
+    @media (max-width: 1180px) {
+      .hero,
+      .layout,
+      .admin-grid,
+      .prototype-grid,
+      .data-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .admin-shell,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page-shell {
+        padding: 16px 14px 54px;
+      }
+
+      .hero-card,
+      .hero-side,
+      .panel,
+      .prototype-card,
+      .admin-card,
+      .modal-card,
+      .timeline,
+      .data-card {
+        border-radius: 24px;
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 38px;
+      }
+
+      .phone-screen {
+        min-height: auto;
+      }
+
+      .score-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .day-grid {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+      }
+
+      .table-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .toast {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">Prototype / PRD Showcase</div>
+        <h1>百元培育型<br>21 天打卡计划</h1>
+        <p>
+          这是一页可直接演示的原型方案网页，面向产品、技术、设计与运营协同评审。
+          页面集中展示用户端核心路径、金句海报激励、福利解锁、结营测评，以及后台配置能力，
+          帮助团队快速对齐功能边界与实现结构。
+        </p>
+        <div class="hero-meta">
+          <div class="meta-pill">C 端打卡闭环</div>
+          <div class="meta-pill">海报分享激励</div>
+          <div class="meta-pill">福利解锁机制</div>
+          <div class="meta-pill">后台配置化运营</div>
+        </div>
+      </div>
+
+      <div class="hero-side">
+        <div class="score-grid">
+          <div class="metric">
+            <strong>21</strong>
+            <span>总打卡天数，采用累计完成机制，形成最小行为闭环。</span>
+          </div>
+          <div class="metric">
+            <strong>6</strong>
+            <span>主要用户端模块：首页、任务、拍照、海报、福利、测评。</span>
+          </div>
+          <div class="metric">
+            <strong>4</strong>
+            <span>后台能力板块：活动、打卡内容、金句海报、福利配置。</span>
+          </div>
+          <div class="metric">
+            <strong>V1</strong>
+            <span>优先跑通配置发布、用户完成、激励分享、解锁福利全链路。</span>
+          </div>
+        </div>
+        <div class="panel" style="padding:18px 20px;">
+          <h2>方案定位</h2>
+          <p>
+            页面偏高保真原型，而不是单纯文档排版。你可以直接把它发给技术做需求沟通，
+            也可以给老板或运营看整体方案长什么样。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="panel">
+          <h2>目录导航</h2>
+          <div class="toc">
+            <a href="#user-flow">用户端原型</a>
+            <a href="#poster-flow">金句海报与激励</a>
+            <a href="#benefit-eval">福利与测评</a>
+            <a href="#admin">后台配置原型</a>
+            <a href="#tech">技术实现建议</a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>V1 关键规则</h2>
+          <ul>
+            <li>按累计打卡天数统计，不要求连续 21 天。</li>
+            <li>每日必做为习题练习，拍照入口选填。</li>
+            <li>当日首次成功提交记为有效打卡。</li>
+            <li>完成当日任务后弹出金句海报用于分享。</li>
+            <li>达到指定天数自动解锁福利。</li>
+            <li>累计完成 21 天后解锁结营测评。</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h2>适合演示给谁</h2>
+          <div class="chip-row">
+            <div class="chip">产品经理</div>
+            <div class="chip">前端开发</div>
+            <div class="chip">后端开发</div>
+            <div class="chip">测试</div>
+            <div class="chip">运营</div>
+            <div class="chip">老板</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>演示控制台</h2>
+          <p>点击下面的按钮，可以直接模拟用户完成一次打卡、查看规则或切到后台模块。</p>
+          <div class="demo-actions">
+            <button class="demo-button" data-action="goto-task">跳到每日任务</button>
+            <button class="demo-button" data-action="complete-checkin">模拟完成打卡</button>
+            <button class="demo-button" data-action="unlock-benefit">模拟解锁 Day 14 福利</button>
+            <button class="demo-button" data-action="open-evaluation">跳到结营测评</button>
+            <button class="demo-button" data-action="show-admin-benefit">切到后台福利配置</button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="stack">
+        <section class="section" id="user-flow">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">User Prototype</div>
+              <h2>用户端核心流程</h2>
+              <p>覆盖活动首页、每日任务和提交打卡三个关键入口，帮助快速确认前端页面结构与交互状态。</p>
+            </div>
+            <div class="tag-row">
+              <div class="tag">活动首页</div>
+              <div class="tag">每日打卡</div>
+              <div class="tag">题目练习</div>
+            </div>
+          </div>
+
+          <div class="prototype-grid">
+            <article class="prototype-card">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Mobile Screen A</div>
+                  <div class="card-title">活动首页</div>
+                </div>
+                <div class="tag">Entry</div>
+              </div>
+              <div class="phone-frame" id="home-phone">
+                <div class="phone-screen">
+                  <div class="screen-header">
+                    <span>09:41</span>
+                    <span>21 天打卡计划</span>
+                  </div>
+                  <div class="banner">
+                    <div class="banner-topbar">
+                      <button class="banner-link" data-action="toggle-rules">查看规则</button>
+                    </div>
+                    <h3>百元培育型<br>21 天打卡计划</h3>
+                    <p>围绕书籍主题刻意练习，每天一点点，把学习做成可坚持的成果。</p>
+                    <div class="button-row">
+                      <button class="btn btn-primary" data-action="goto-task">继续打卡</button>
+                    </div>
+                  </div>
+
+                  <div class="home-focus-card">
+                    <div class="today-content-card home-clickable" data-action="goto-task">
+                      <div class="row-between">
+                        <strong>今日打卡内容</strong>
+                        <span class="benefit-badge">Day 13</span>
+                      </div>
+                      围绕“沟通风格识别”完成 4 道练习题，支持单选、多选、填空和音频题干。
+                    </div>
+                    <div class="progress-card" style="margin-top:0;">
+                      <div class="progress-head">
+                        <strong>当前进度</strong>
+                        <span id="progress-count" style="color:var(--accent-deep);font-weight:800;">13 / 21 天</span>
+                      </div>
+                      <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                      </div>
+                      <div class="gift-track">
+                        <div class="gift-node unlocked">
+                          <div class="gift-icon">🎁</div>
+                          <span>Day 7</span>
+                        </div>
+                        <div class="gift-node current" id="gift-day14">
+                          <div class="gift-icon">🎁</div>
+                          <span>Day 14</span>
+                        </div>
+                        <div class="gift-node" id="gift-day21">
+                          <div class="gift-icon">🎁</div>
+                          <span>Day 21</span>
+                        </div>
+                      </div>
+                      <div class="day-grid" id="day-grid">
+                        <div class="day done" data-day="1">1</div>
+                        <div class="day done" data-day="2">2</div>
+                        <div class="day done" data-day="3">3</div>
+                        <div class="day done" data-day="4">4</div>
+                        <div class="day done" data-day="5">5</div>
+                        <div class="day done" data-day="6">6</div>
+                        <div class="day done" data-day="7">7</div>
+                        <div class="day done" data-day="8">8</div>
+                        <div class="day done" data-day="9">9</div>
+                        <div class="day done" data-day="10">10</div>
+                        <div class="day done" data-day="11">11</div>
+                        <div class="day done" data-day="12">12</div>
+                        <div class="day today selected" data-day="13">13</div>
+                        <div class="day" id="day-14" data-day="14">14</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button class="floating-consultant" data-action="open-consultant">
+                    <div class="qr-chip">顾</div>
+                    <span>顾问<br>入口</span>
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="prototype-card">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Mobile Screen B</div>
+                  <div class="card-title">每日打卡任务</div>
+                </div>
+                <div class="tag">Task</div>
+              </div>
+              <div class="phone-frame" id="task-phone">
+                <div class="phone-screen task-screen">
+                  <div class="task-scroll-area">
+                    <div class="screen-header">
+                      <span id="task-day-label">Day 13</span>
+                      <span id="task-day-status">今日任务</span>
+                    </div>
+
+                    <div class="mini-card" style="background:linear-gradient(180deg,#fff9f3,#f7ecdf);">
+                      <div class="row-between">
+                        <strong id="task-card-title">刻意练习</strong>
+                        <span class="benefit-badge">必做</span>
+                      </div>
+                      <p id="task-card-desc">技术主题跟随书籍章节，本日围绕“沟通风格识别”完成 4 道练习题，覆盖单选、多选、填空与媒体题干。</p>
+                    </div>
+
+                    <div class="section-label">
+                      <span>题目 1 / 3</span>
+                      <span>单选题</span>
+                    </div>
+                    <div class="qa-card">
+                      <strong>以下哪种描述更符合“先观察后回应”的沟通习惯？</strong>
+                      <div class="option-list" style="margin-top:12px;">
+                        <label class="option">
+                          <input type="radio" checked>
+                          <div class="option-body">
+                            <strong>A. 先快速给建议，再看对方反应</strong>
+                            更偏即时输出，不是本题最佳答案。
+                          </div>
+                        </label>
+                        <label class="option">
+                          <input type="radio">
+                          <div class="option-body">
+                            <strong>B. 先确认对方状态，再选择表达方式</strong>
+                            符合观察、判断、回应的练习目标。
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="section-label">
+                      <span>题目 2 / 4</span>
+                      <span>填空题</span>
+                    </div>
+                    <input class="text-input" value="先辨别情绪，再进入建议阶段">
+
+                    <div class="section-label">
+                      <span>题目 3 / 4</span>
+                      <span>多选题</span>
+                    </div>
+                    <div class="qa-card">
+                      <strong>以下哪些动作更适合作为“先观察后回应”的练习步骤？</strong>
+                      <div class="option-list" style="margin-top:12px;">
+                        <label class="option">
+                          <input type="checkbox" checked>
+                          <div class="option-body">
+                            <strong>A. 先确认对方情绪和上下文</strong>
+                            帮助用户在表达前先完成情境判断。
+                          </div>
+                        </label>
+                        <label class="option">
+                          <input type="checkbox" checked>
+                          <div class="option-body">
+                            <strong>B. 根据对方状态调整表达强度</strong>
+                            体现“先观察，再选择回应方式”的训练目标。
+                          </div>
+                        </label>
+                        <label class="option">
+                          <input type="checkbox">
+                          <div class="option-body">
+                            <strong>C. 不听完就立刻给解决方案</strong>
+                            这类即时输出更像习惯性反应，不属于本题推荐路径。
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="section-label">
+                      <span>题目 4 / 4</span>
+                      <span>音频题干</span>
+                    </div>
+                    <div class="qa-card">
+                      <div class="row-between" style="margin-bottom:10px;">
+                        <strong>请听一段对话，判断更合适的回应方式</strong>
+                        <span class="benefit-badge">音频 23s</span>
+                      </div>
+                      <div class="photo-box" style="margin-top:0;text-align:left;">
+                        音频播放器示意<br>
+                        进度条 / 播放按钮 / 重听入口
+                      </div>
+                      <div class="option-list" style="margin-top:12px;">
+                        <label class="option">
+                          <input type="radio" name="audio-question" checked>
+                          <div class="option-body">
+                            <strong>A. 先复述对方困扰，再进入建议</strong>
+                            适合作为观察后的回应示范。
+                          </div>
+                        </label>
+                        <label class="option">
+                          <input type="radio" name="audio-question">
+                          <div class="option-body">
+                            <strong>B. 直接给出完整解决方案</strong>
+                            回应速度快，但缺少对情绪和语境的确认。
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="section-label">
+                      <span>拍照入口</span>
+                      <span>选填</span>
+                    </div>
+                    <div class="photo-box">
+                      上传今日练习笔记或阅读现场照片<br>
+                      支持拍照 / 相册，V1 限 1 张
+                    </div>
+                  </div>
+
+                  <div class="floating-action-bar">
+                    <div class="button-row" style="margin-top:0;">
+                      <button class="btn btn-primary" data-action="complete-checkin">提交打卡</button>
+                      <button class="btn btn-secondary" data-action="save-draft">暂存草稿</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="poster-flow">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Reward Moment</div>
+              <h2>打卡成功后的金句海报</h2>
+              <p>这是用户最强的情绪反馈节点。完成当日练习后，系统立即生成“今日打卡金句”海报，用于保存与分享。</p>
+            </div>
+            <div class="tag-row">
+              <div class="tag">海报模板</div>
+              <div class="tag">书籍金句池</div>
+              <div class="tag">分享激励</div>
+            </div>
+          </div>
+
+          <div class="prototype-grid">
+            <article class="modal-card" id="poster-card">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Popup State</div>
+                  <div class="card-title">打卡成功弹层</div>
+                </div>
+                <div class="tag">Success</div>
+              </div>
+              <div class="poster-preview">
+                <div class="quote-poster">
+                  <div>
+                    <div class="eyebrow" style="background:rgba(255,255,255,0.12);color:#fff7ef;">Day 13 Completed</div>
+                    <div class="quote-copy">
+                      “真正有效的练习，不是做得多，而是知道自己今天比昨天更清楚了一点。”
+                    </div>
+                  </div>
+                  <div class="poster-footer">
+                    <div class="poster-book">
+                      <div class="book-cover"></div>
+                      <div>
+                        <strong style="display:block;">《高质量沟通训练》</strong>
+                        <span style="font-size:13px;color:rgba(255,249,243,0.8);">今日金句来自用户当前打卡书籍</span>
+                      </div>
+                    </div>
+                    <div class="button-row">
+                      <button class="btn btn-primary" data-action="share-achievement">复制分享文案</button>
+                      <button class="btn btn-secondary" data-action="share-achievement">分享成果</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="timeline">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Interaction Logic</div>
+                  <div class="card-title">海报生成规则</div>
+                </div>
+                <div class="tag">Logic</div>
+              </div>
+              <div class="step-list">
+                <div class="step">
+                  <div class="step-index">1</div>
+                  <div>
+                    <strong>打卡提交成功</strong>
+                    系统校验必答题完成，并写入用户当日有效打卡记录。
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="step-index">2</div>
+                  <div>
+                    <strong>匹配书籍金句</strong>
+                    优先取“书籍 + Day”专属配置，未命中时从书籍金句池中随机抽取。
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="step-index">3</div>
+                  <div>
+                    <strong>生成海报 URL</strong>
+                    建议服务端模板化生成，返回可缓存的图片链接，前端只负责展示。
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="step-index">4</div>
+                  <div>
+                    <strong>触发分享行为</strong>
+                    用户可保存到本地，也可复制文案，后续扩展朋友圈、微信聊天、小红书分享。
+                  </div>
+                </div>
+              </div>
+              <div class="footer-note">
+                技术建议：优先服务端生成海报，减少前端机型兼容与字体排版问题。
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="benefit-eval">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Retention Mechanics</div>
+              <h2>福利解锁与结营测评</h2>
+              <p>用阶段性福利拉动持续参与，用 21 天后的测评形成完成感和结果反馈。</p>
+            </div>
+            <div class="tag-row">
+              <div class="tag">Day 7 / 14 / 21 福利</div>
+              <div class="tag">结营测评</div>
+            </div>
+          </div>
+
+          <div class="prototype-grid">
+            <article class="prototype-card">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Mobile Screen C</div>
+                  <div class="card-title">福利解锁页</div>
+                </div>
+                <div class="tag">Benefit</div>
+              </div>
+              <div class="phone-frame" id="benefit-phone">
+                <div class="phone-screen">
+                  <div class="screen-header">
+                    <span>福利中心</span>
+                    <span>累计解锁</span>
+                  </div>
+                  <div class="mini-card" style="background:linear-gradient(180deg,#fff8ef,#f4e6d3);">
+                    <strong>你的练习成果正在变现成福利</strong>
+                    <p>完成指定天数后自动解锁，支持图片、音频、文件或链接跳转。</p>
+                  </div>
+
+                  <div class="section-label">
+                    <span>福利节点</span>
+                    <span>后台配置</span>
+                  </div>
+                  <div class="status-strip">
+                    <span>当前累计打卡</span>
+                    <strong id="benefit-progress-text">13 天，距离 Day 14 福利还差 1 天</strong>
+                  </div>
+                  <div class="benefit-list" style="margin-top:10px;">
+                    <div class="benefit-item is-clickable">
+                      <div class="benefit-body">
+                        <div class="row-between">
+                          <strong>Day 7 解锁：练习陪跑音频</strong>
+                          <span class="benefit-badge">已解锁</span>
+                        </div>
+                        今日可查看音频资源，并引导继续冲刺下一阶段。
+                      </div>
+                    </div>
+                    <div class="benefit-item locked is-clickable" id="benefit-day14" data-benefit-state="locked">
+                      <div class="benefit-body">
+                        <div class="row-between">
+                          <strong>Day 14 解锁：进阶答疑资料包</strong>
+                          <span class="benefit-badge locked" id="benefit-day14-badge">还差 1 天</span>
+                        </div>
+                        可配置文件下载、图片海报或站内跳转页。
+                      </div>
+                    </div>
+                    <div class="benefit-item locked">
+                      <div class="benefit-body">
+                        <div class="row-between">
+                          <strong>Day 21 解锁：结营特别福利</strong>
+                          <span class="benefit-badge locked">未解锁</span>
+                        </div>
+                        适合作为结营奖励或转化承接入口。
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="prototype-card">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Mobile Screen D</div>
+                  <div class="card-title">结营测评结果</div>
+                </div>
+                <div class="tag">Evaluation</div>
+              </div>
+              <div class="phone-frame" id="evaluation-phone">
+                <div class="phone-screen">
+                  <div class="screen-header">
+                    <span>结营测评</span>
+                    <span>已完成</span>
+                  </div>
+
+                  <div class="result-card" style="background:linear-gradient(180deg,#fff8ef,#f3e4d3);text-align:center;">
+                    <div class="eyebrow" style="margin-bottom:10px;">21 天完成者专属</div>
+                    <div class="result-score">86</div>
+                    <strong>你目前处于「稳定成长型」</strong>
+                    <p>说明你已经形成基础练习节奏，建议继续强化“观察 - 回应 - 复盘”的应用能力。</p>
+                  </div>
+
+                  <div class="section-label">
+                    <span>结果解读</span>
+                    <span>支持后台配置文案</span>
+                  </div>
+                  <div class="bullet-list">
+                    <div class="bullet">
+                      <div class="bullet-index">A</div>
+                      <div class="bullet-body">
+                        <strong>优势</strong>
+                        练习完成稳定，对题目结构理解较好。
+                      </div>
+                    </div>
+                    <div class="bullet">
+                      <div class="bullet-index">B</div>
+                      <div class="bullet-body">
+                        <strong>建议</strong>
+                        适合进入进阶训练营或延伸课程承接。
+                      </div>
+                    </div>
+                    <div class="bullet">
+                      <div class="bullet-index">C</div>
+                      <div class="bullet-body">
+                        <strong>运营延展</strong>
+                        可配合顾问二维码、结果分享卡或下一步推荐内容。
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="button-row">
+                    <button class="btn btn-primary" data-action="open-benefit">查看结营福利</button>
+                    <button class="btn btn-secondary" data-action="share-report">分享成长报告</button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="admin">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Operations Console</div>
+              <h2>后台配置原型</h2>
+              <p>让运营可以独立完成 banner、规则、内容题目、福利资源和顾问二维码配置，不依赖反复提开发单。</p>
+            </div>
+            <div class="tag-row">
+              <div class="tag">活动配置</div>
+              <div class="tag">内容配置</div>
+              <div class="tag">福利配置</div>
+              <div class="tag">二维码配置</div>
+            </div>
+          </div>
+
+          <div class="admin-grid">
+            <article class="admin-card">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Admin Screen A</div>
+                  <div class="card-title">活动与内容配置</div>
+                </div>
+                <div class="tag">CMS</div>
+              </div>
+              <div class="admin-shell">
+                <div class="admin-nav">
+                  <div style="font-weight:800;margin-bottom:8px;">21 天打卡后台</div>
+                  <div class="nav-item active" data-admin-tab="activity">活动管理</div>
+                  <div class="nav-item" data-admin-tab="content">打卡内容</div>
+                  <div class="nav-item" data-admin-tab="poster">金句海报</div>
+                  <div class="nav-item" data-admin-tab="benefit">福利配置</div>
+                  <div class="nav-item" data-admin-tab="qr">顾问二维码</div>
+                  <div class="nav-item" data-admin-tab="evaluation">测评管理</div>
+                </div>
+
+                <div class="admin-main">
+                  <div class="admin-panel-view active" data-admin-panel="activity">
+                  <div class="admin-toolbar row-between">
+                    <strong>活动基础配置</strong>
+                    <div class="button-row" style="margin-top:0;">
+                      <button class="btn btn-secondary">预览</button>
+                      <button class="btn btn-primary">发布活动</button>
+                    </div>
+                  </div>
+
+                  <div class="form-grid">
+                    <div class="field">
+                      <label>活动名称</label>
+                      <div class="mock-input">百元培育型 21 天打卡计划</div>
+                    </div>
+                    <div class="field">
+                      <label>关联书籍</label>
+                      <div class="mock-input">高质量沟通训练</div>
+                    </div>
+                    <div class="field">
+                      <label>Banner</label>
+                      <div class="mock-input">banner_21day_v3.png</div>
+                    </div>
+                    <div class="field">
+                      <label>顾问二维码</label>
+                      <div class="mock-input">consultant_qr_01.png</div>
+                    </div>
+                    <div class="field" style="grid-column:1 / -1;">
+                      <label>活动规则</label>
+                      <textarea>累计 21 天完成即结营；题目为必做；拍照入口为选填；完成后展示今日金句海报。</textarea>
+                    </div>
+                  </div>
+
+                  <div class="table-like">
+                    <div class="row-between" style="margin-bottom:8px;">
+                      <strong>Day 内容配置</strong>
+                      <span style="color:var(--muted);font-size:13px;">支持音频、图片、单选、多选、填空</span>
+                    </div>
+                    <div class="table-row">
+                      <strong>Day 1</strong>
+                      <span>沟通观察入门 3 题</span>
+                      <span>含音频</span>
+                      <span>拍照关闭</span>
+                      <span>已发布</span>
+                    </div>
+                    <div class="table-row">
+                      <strong>Day 13</strong>
+                      <span>沟通风格识别 3 题</span>
+                      <span>含图片题干</span>
+                      <span>拍照开启</span>
+                      <span>已发布</span>
+                    </div>
+                    <div class="table-row">
+                      <strong>Day 21</strong>
+                      <span>综合练习与结营引导</span>
+                      <span>纯题目</span>
+                      <span>拍照关闭</span>
+                      <span>待校验</span>
+                    </div>
+                  </div>
+                  <div class="admin-panel-view" data-admin-panel="content">
+                    <div class="admin-toolbar row-between">
+                      <strong>打卡内容管理</strong>
+                      <div class="button-row" style="margin-top:0;">
+                        <button class="btn btn-secondary">批量导入</button>
+                        <button class="btn btn-primary">新增题目</button>
+                      </div>
+                    </div>
+                    <div class="config-list">
+                      <div class="table-row">
+                        <strong>单选题</strong>
+                        <span>支持标准选项、正确答案、解析、排序</span>
+                        <span>Day 1-21</span>
+                        <span>已启用</span>
+                        <span>可预览</span>
+                      </div>
+                      <div class="table-row">
+                        <strong>多选题</strong>
+                        <span>支持多个正确答案与部分错因说明</span>
+                        <span>Day 1-21</span>
+                        <span>已启用</span>
+                        <span>可预览</span>
+                      </div>
+                      <div class="table-row">
+                        <strong>填空题</strong>
+                        <span>支持标准答案、关键词匹配与提示</span>
+                        <span>Day 1-21</span>
+                        <span>已启用</span>
+                        <span>可预览</span>
+                      </div>
+                      <div class="table-row">
+                        <strong>媒体题干</strong>
+                        <span>支持图片与音频资源上传</span>
+                        <span>按日配置</span>
+                        <span>已启用</span>
+                        <span>可预览</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="admin-panel-view" data-admin-panel="poster">
+                    <div class="admin-toolbar row-between">
+                      <strong>金句海报配置</strong>
+                      <div class="button-row" style="margin-top:0;">
+                        <button class="btn btn-secondary">预览模板</button>
+                        <button class="btn btn-primary">新增金句</button>
+                      </div>
+                    </div>
+                    <div class="config-list">
+                      <div class="bullet-list">
+                        <div class="bullet">
+                          <div class="bullet-index">1</div>
+                          <div class="bullet-body">
+                            <strong>按书籍配置金句池</strong>
+                            一个书籍可维护多条金句，支持默认兜底和按 Day 指定。
+                          </div>
+                        </div>
+                        <div class="bullet">
+                          <div class="bullet-index">2</div>
+                          <div class="bullet-body">
+                            <strong>复用海报模板</strong>
+                            替换背景图、书封、品牌 logo、分享文案即可生成不同活动海报。
+                          </div>
+                        </div>
+                        <div class="bullet">
+                          <div class="bullet-index">3</div>
+                          <div class="bullet-body">
+                            <strong>服务端生成缓存 URL</strong>
+                            前端只接收海报地址并展示分享入口。
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="admin-panel-view" data-admin-panel="benefit">
+                    <div class="admin-toolbar row-between">
+                      <strong>福利配置面板</strong>
+                      <div class="button-row" style="margin-top:0;">
+                        <button class="btn btn-secondary">校验规则</button>
+                        <button class="btn btn-primary">新增福利节点</button>
+                      </div>
+                    </div>
+                    <div class="config-list">
+                      <div class="table-row">
+                        <strong>Day 7</strong>
+                        <span>练习陪跑音频</span>
+                        <span>音频</span>
+                        <span>自动解锁</span>
+                        <span>已发布</span>
+                      </div>
+                      <div class="table-row">
+                        <strong>Day 14</strong>
+                        <span>进阶答疑资料包</span>
+                        <span>文件</span>
+                        <span>自动解锁</span>
+                        <span>已发布</span>
+                      </div>
+                      <div class="table-row">
+                        <strong>Day 21</strong>
+                        <span>结营惊喜福利</span>
+                        <span>链接</span>
+                        <span>自动解锁</span>
+                        <span>已发布</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="admin-panel-view" data-admin-panel="qr">
+                    <div class="admin-toolbar row-between">
+                      <strong>顾问二维码配置</strong>
+                      <div class="button-row" style="margin-top:0;">
+                        <button class="btn btn-secondary">替换二维码</button>
+                        <button class="btn btn-primary">发布到前台</button>
+                      </div>
+                    </div>
+                    <div class="form-grid">
+                      <div class="field">
+                        <label>二维码资源</label>
+                        <div class="mock-input">consultant_qr_01.png</div>
+                      </div>
+                      <div class="field">
+                        <label>展示位置</label>
+                        <div class="mock-input">活动首页 / 结营结果页</div>
+                      </div>
+                      <div class="field" style="grid-column:1 / -1;">
+                        <label>引导文案</label>
+                        <textarea>扫码添加顾问，领取成长路径建议与后续练习资料。</textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="admin-panel-view" data-admin-panel="evaluation">
+                    <div class="admin-toolbar row-between">
+                      <strong>结营测评管理</strong>
+                      <div class="button-row" style="margin-top:0;">
+                        <button class="btn btn-secondary">查看结果分层</button>
+                        <button class="btn btn-primary">编辑测评题</button>
+                      </div>
+                    </div>
+                    <div class="config-list">
+                      <div class="bullet-list">
+                        <div class="bullet">
+                          <div class="bullet-index">A</div>
+                          <div class="bullet-body">
+                            <strong>解锁条件</strong>
+                            累计完成 21 天打卡后自动开放测评入口。
+                          </div>
+                        </div>
+                        <div class="bullet">
+                          <div class="bullet-index">B</div>
+                          <div class="bullet-body">
+                            <strong>结果分层</strong>
+                            支持按分数输出不同标签、文案和推荐承接内容。
+                          </div>
+                        </div>
+                        <div class="bullet">
+                          <div class="bullet-index">C</div>
+                          <div class="bullet-body">
+                            <strong>数据留存</strong>
+                            题目、答案、结果标签均需快照保存，便于后续统计分析。
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="admin-card">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Admin Screen B</div>
+                  <div class="card-title">福利与金句配置</div>
+                </div>
+                <div class="tag">Config</div>
+              </div>
+              <div class="admin-main">
+                <div class="config-list">
+                  <div class="row-between">
+                    <strong>福利节点</strong>
+                    <span style="color:var(--muted);font-size:13px;">按打卡天数解锁</span>
+                  </div>
+                  <div class="table-row">
+                    <strong>Day 7</strong>
+                    <span>练习陪跑音频</span>
+                    <span>音频</span>
+                    <span>启用中</span>
+                    <span>自动解锁</span>
+                  </div>
+                  <div class="table-row">
+                    <strong>Day 14</strong>
+                    <span>答疑资料包</span>
+                    <span>文件</span>
+                    <span>启用中</span>
+                    <span>自动解锁</span>
+                  </div>
+                  <div class="table-row">
+                    <strong>Day 21</strong>
+                    <span>结营惊喜福利</span>
+                    <span>链接</span>
+                    <span>启用中</span>
+                    <span>自动解锁</span>
+                  </div>
+                </div>
+
+                <div class="config-list">
+                  <div class="row-between">
+                    <strong>金句模板</strong>
+                    <span style="color:var(--muted);font-size:13px;">按书籍 / Day 管理</span>
+                  </div>
+                  <div class="bullet-list" style="margin-top:12px;">
+                    <div class="bullet">
+                      <div class="bullet-index">1</div>
+                      <div class="bullet-body">
+                        <strong>关联书籍</strong>
+                        同一本书可配置多条金句，支持按 Day 固定绑定。
+                      </div>
+                    </div>
+                    <div class="bullet">
+                      <div class="bullet-index">2</div>
+                      <div class="bullet-body">
+                        <strong>海报模板</strong>
+                        模板复用，替换书封图、品牌 logo、分享文案即可。
+                      </div>
+                    </div>
+                    <div class="bullet">
+                      <div class="bullet-index">3</div>
+                      <div class="bullet-body">
+                        <strong>默认兜底</strong>
+                        当日未配置专属金句时，使用书籍默认金句池随机兜底。
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="config-list">
+                  <div class="row-between">
+                    <strong>发布前校验</strong>
+                    <span style="color:var(--muted);font-size:13px;">降低运营出错成本</span>
+                  </div>
+                  <div class="legend">
+                    <span>题目答案不能为空</span>
+                    <span>Day 内容不能为空</span>
+                    <span>福利天数不能超过 21</span>
+                    <span>链接地址需合法</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="tech">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Implementation Notes</div>
+              <h2>技术实现建议与数据边界</h2>
+              <p>给研发评审时可直接用来拆模块、定表结构和接口边界。</p>
+            </div>
+            <div class="tag-row">
+              <div class="tag">数据快照</div>
+              <div class="tag">服务端海报</div>
+              <div class="tag">配置化系统</div>
+            </div>
+          </div>
+
+          <div class="data-grid">
+            <article class="data-card">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Data Model</div>
+                  <div class="card-title">关键实体</div>
+                </div>
+              </div>
+              <ul>
+                <li>活动表：活动标题、banner、规则、顾问二维码、状态。</li>
+                <li>书籍表：书名、封面、描述。</li>
+                <li>题目表：题型、题干、选项、答案、解析、Day、排序。</li>
+                <li>用户打卡计划表：参与时间、累计天数、状态。</li>
+                <li>用户打卡记录表：答案快照、图片 URL、得分、提交时间。</li>
+                <li>福利配置表与用户福利状态表。</li>
+                <li>金句表与海报模板关联表。</li>
+              </ul>
+            </article>
+
+            <article class="data-card">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">API Scope</div>
+                  <div class="card-title">核心接口</div>
+                </div>
+              </div>
+              <ul>
+                <li>获取活动首页信息。</li>
+                <li>创建或读取用户 21 天打卡计划。</li>
+                <li>获取当日打卡内容。</li>
+                <li>提交答案、上传图片、提交打卡。</li>
+                <li>获取金句海报信息或海报 URL。</li>
+                <li>获取福利列表与解锁状态。</li>
+                <li>获取结营测评题与提交结果。</li>
+                <li>后台活动、内容、福利、海报配置接口。</li>
+              </ul>
+            </article>
+
+            <article class="data-card">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Risk Control</div>
+                  <div class="card-title">注意事项</div>
+                </div>
+              </div>
+              <ul>
+                <li>题目与测评结果要保存快照，避免后续修改污染历史数据。</li>
+                <li>海报建议服务端生成并缓存，减少前端兼容问题。</li>
+                <li>上传图片需校验格式和大小，必要时接内容安全审核。</li>
+                <li>后台需有权限和操作日志，防止误发布。</li>
+                <li>同一用户同一天仅记一次有效打卡。</li>
+                <li>发布前必须做内容完整性校验。</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div class="rule-drawer" id="rule-drawer">
+    <div class="rule-card">
+      <div class="row-between" style="margin-bottom:14px;">
+        <h3>活动规则</h3>
+        <button class="btn btn-secondary" data-action="close-rules">关闭</button>
+      </div>
+      <ul>
+        <li>采用累计 21 天打卡机制，不要求连续完成。</li>
+        <li>每日习题为必做，拍照入口根据活动配置决定是否展示。</li>
+        <li>当日首次提交成功记为有效打卡，并触发金句海报。</li>
+        <li>达到指定打卡天数后自动解锁对应福利。</li>
+        <li>累计完成 21 天后解锁结营测评与结果页。</li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    const state = {
+      completedDays: 13,
+      benefitUnlocked: false,
+      activeAdminTab: "activity"
+    };
+
+    const sections = Array.from(document.querySelectorAll(".section"));
+    const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+    const toast = document.getElementById("toast");
+    const ruleDrawer = document.getElementById("rule-drawer");
+    const progressCount = document.getElementById("progress-count");
+    const progressFill = document.getElementById("progress-fill");
+    const day14 = document.getElementById("day-14");
+    const dayCells = Array.from(document.querySelectorAll("[data-day]"));
+    const benefitDay14 = document.getElementById("benefit-day14");
+    const benefitDay14Badge = document.getElementById("benefit-day14-badge");
+    const benefitProgressText = document.getElementById("benefit-progress-text");
+    const taskDayLabel = document.getElementById("task-day-label");
+    const taskDayStatus = document.getElementById("task-day-status");
+    const taskCardTitle = document.getElementById("task-card-title");
+    const taskCardDesc = document.getElementById("task-card-desc");
+
+    const dayContentMap = {
+      1: { status: "已完成回看", title: "刻意练习", desc: "Day 1 以“沟通观察入门”为主题，完成了基础识别练习与首日建立习惯任务。" },
+      2: { status: "已完成回看", title: "刻意练习", desc: "Day 2 聚焦倾听与反馈的差异，用户已完成当日练习内容与结果回顾。" },
+      3: { status: "已完成回看", title: "刻意练习", desc: "Day 3 进入沟通场景判断练习，展示当天已完成的答题内容与解析示意。" },
+      4: { status: "已完成回看", title: "刻意练习", desc: "Day 4 模拟不同表达方式的效果判断，支持用户回看已打卡内容。" },
+      5: { status: "已完成回看", title: "刻意练习", desc: "Day 5 围绕“先观察再回应”的步骤拆解，适合演示历史回看。" },
+      6: { status: "已完成回看", title: "刻意练习", desc: "Day 6 练习情绪识别与表达节奏控制，页面展示为已完成状态。" },
+      7: { status: "已完成回看", title: "刻意练习", desc: "Day 7 完成阶段小结，并同步解锁首个福利节点。" },
+      8: { status: "已完成回看", title: "刻意练习", desc: "Day 8 进入更复杂的对话判断练习，可回看对应打卡记录。" },
+      9: { status: "已完成回看", title: "刻意练习", desc: "Day 9 重点训练先确认对方状态再给建议的应用能力。" },
+      10: { status: "已完成回看", title: "刻意练习", desc: "Day 10 通过多题型混合训练强化用户对沟通风格的识别。" },
+      11: { status: "已完成回看", title: "刻意练习", desc: "Day 11 展示用户已完成的答题卡片、解析和可选拍照内容。" },
+      12: { status: "已完成回看", title: "刻意练习", desc: "Day 12 以进阶练习为主，突出历史记录和累计进度的连续性。" },
+      13: { status: "今日任务", title: "刻意练习", desc: "技术主题跟随书籍章节，本日围绕“沟通风格识别”完成 4 道练习题，覆盖单选、多选、填空与媒体题干。" },
+      14: { status: "待完成任务", title: "刻意练习", desc: "Day 14 将进入进阶答疑资料包解锁节点，用户完成今日练习后即可领取福利。" }
+    };
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    function scrollToSection(id) {
+      const target = document.getElementById(id);
+      if (!target) return;
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function pulseElement(el) {
+      if (!el) return;
+      el.classList.remove("pulse-once");
+      void el.offsetWidth;
+      el.classList.add("pulse-once");
+    }
+
+    function focusPhone(id) {
+      document.querySelectorAll(".phone-frame").forEach((frame) => frame.classList.remove("focus-ring"));
+      const target = document.getElementById(id);
+      if (target) {
+        target.classList.add("focus-ring");
+        pulseElement(target);
+      }
+    }
+
+    function updateProgress() {
+      progressCount.textContent = state.completedDays + " / 21 天";
+      progressFill.style.width = (state.completedDays / 21) * 100 + "%";
+      if (state.completedDays >= 14) {
+        day14.classList.add("done");
+        day14.classList.remove("today");
+      }
+    }
+
+    function setTaskDay(day) {
+      const numericDay = Number(day);
+      const meta = dayContentMap[numericDay] || dayContentMap[13];
+      taskDayLabel.textContent = "Day " + numericDay;
+      taskDayStatus.textContent = meta.status;
+      taskCardTitle.textContent = meta.title;
+      taskCardDesc.textContent = meta.desc;
+      dayCells.forEach((cell) => {
+        cell.classList.toggle("selected", Number(cell.dataset.day) === numericDay);
+      });
+    }
+
+    function unlockBenefit(withToast = true) {
+      state.benefitUnlocked = true;
+      benefitDay14.classList.remove("locked");
+      benefitDay14.classList.add("unlocked-highlight");
+      benefitDay14.dataset.benefitState = "unlocked";
+      benefitDay14Badge.textContent = "已解锁";
+      benefitDay14Badge.classList.remove("locked");
+      benefitProgressText.textContent = "14 天，Day 14 福利已解锁，可点击查看";
+      if (withToast) {
+        showToast("Day 14 福利已解锁，可进入资料包查看页。");
+      }
+      pulseElement(document.getElementById("benefit-phone"));
+    }
+
+    function completeCheckin() {
+      if (state.completedDays < 14) {
+        state.completedDays = 14;
+      }
+      updateProgress();
+      unlockBenefit(false);
+      scrollToSection("poster-flow");
+      focusPhone("task-phone");
+      pulseElement(document.getElementById("poster-card"));
+      showToast("今日打卡成功，已生成金句海报，并同步更新福利状态。");
+    }
+
+    function setAdminTab(tabName) {
+      state.activeAdminTab = tabName;
+      document.querySelectorAll("[data-admin-tab]").forEach((item) => {
+        item.classList.toggle("active", item.dataset.adminTab === tabName);
+      });
+      document.querySelectorAll("[data-admin-panel]").forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.adminPanel === tabName);
+      });
+    }
+
+    function updateActiveSection() {
+      const y = window.scrollY + 120;
+      let currentId = sections[0] ? sections[0].id : "";
+      sections.forEach((section) => {
+        if (section.offsetTop <= y) currentId = section.id;
+      });
+      tocLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === "#" + currentId);
+      });
+      sections.forEach((section) => {
+        section.classList.toggle("is-active", section.id === currentId);
+      });
+    }
+
+    document.addEventListener("click", (event) => {
+      const trigger = event.target.closest("[data-action]");
+      if (!trigger) return;
+      const action = trigger.dataset.action;
+
+      if (action === "goto-task") {
+        scrollToSection("user-flow");
+        setTaskDay(13);
+        focusPhone("task-phone");
+        showToast("已跳到每日任务区，可以继续演示做题与提交。");
+      }
+      if (action === "toggle-rules") {
+        ruleDrawer.classList.add("open");
+      }
+      if (action === "close-rules") {
+        ruleDrawer.classList.remove("open");
+      }
+      if (action === "complete-checkin") {
+        completeCheckin();
+      }
+      if (action === "save-draft") {
+        showToast("草稿已暂存，便于用户稍后继续答题。");
+      }
+      if (action === "share-achievement") {
+        showToast("已触发分享动作，可扩展为朋友圈、微信聊天或小红书分享。");
+      }
+      if (action === "open-benefit") {
+        scrollToSection("benefit-eval");
+        focusPhone("benefit-phone");
+        showToast("已跳到福利页，适合演示打卡天数与福利解锁关系。");
+      }
+      if (action === "share-report") {
+        showToast("成长报告已进入分享流程，可继续承接顾问或后续课程转化。");
+      }
+      if (action === "unlock-benefit") {
+        state.completedDays = Math.max(state.completedDays, 14);
+        updateProgress();
+        unlockBenefit(true);
+        scrollToSection("benefit-eval");
+        focusPhone("benefit-phone");
+      }
+      if (action === "open-evaluation") {
+        scrollToSection("benefit-eval");
+        focusPhone("evaluation-phone");
+        showToast("已定位到结营测评结果页，可继续演示结果分层与分享。");
+      }
+      if (action === "show-admin-benefit") {
+        scrollToSection("admin");
+        setAdminTab("benefit");
+        showToast("后台已切换到福利配置模块。");
+      }
+      if (action === "open-consultant") {
+        showToast("已打开顾问二维码浮窗入口，可承接咨询与转化。");
+      }
+    });
+
+    ruleDrawer.addEventListener("click", (event) => {
+      if (event.target === ruleDrawer) {
+        ruleDrawer.classList.remove("open");
+      }
+    });
+
+    document.querySelectorAll("[data-admin-tab]").forEach((item) => {
+      item.addEventListener("click", () => setAdminTab(item.dataset.adminTab));
+    });
+
+    benefitDay14.addEventListener("click", () => {
+      if (benefitDay14.dataset.benefitState === "unlocked") {
+        showToast("已进入 Day 14 福利详情，可展示资料包、链接或下载入口。");
+      } else {
+        showToast("当前还未达到解锁条件，完成 1 天打卡后可解锁。");
+      }
+    });
+
+    dayCells.forEach((cell) => {
+      cell.addEventListener("click", () => {
+        const day = Number(cell.dataset.day);
+        setTaskDay(day);
+        scrollToSection("user-flow");
+        focusPhone("task-phone");
+        showToast("已切换到 Day " + day + " 的打卡内容回看。");
+      });
+    });
+
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    updateProgress();
+    setTaskDay(13);
+    updateActiveSection();
+  </script>
+</body>
+</html>
