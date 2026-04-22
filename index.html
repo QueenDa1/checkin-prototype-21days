@@ -1287,6 +1287,114 @@
       color: var(--accent-deep);
     }
 
+    .makeup-showcase {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 20px;
+    }
+
+    .makeup-panel {
+      border-radius: 28px;
+      padding: 20px;
+      background: rgba(255, 251, 246, 0.92);
+      border: 1px solid rgba(96, 66, 42, 0.08);
+      box-shadow: var(--shadow);
+    }
+
+    .makeup-slots {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .makeup-slot {
+      border-radius: 18px;
+      padding: 14px 8px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid rgba(96, 66, 42, 0.08);
+    }
+
+    .makeup-slot strong {
+      display: block;
+      font-size: 22px;
+      color: var(--accent-deep);
+      margin-bottom: 6px;
+    }
+
+    .makeup-slot span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .share-claim-card {
+      border-radius: 24px;
+      padding: 18px;
+      background: linear-gradient(180deg, #fff5e8, #f7e3cc);
+      border: 1px solid rgba(209, 100, 60, 0.12);
+    }
+
+    .share-claim-card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .makeup-steps {
+      display: grid;
+      gap: 10px;
+      margin: 14px 0 0;
+    }
+
+    .makeup-step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(96, 66, 42, 0.08);
+    }
+
+    .makeup-step strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .makeup-step-index {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff0e4;
+      color: var(--accent-deep);
+      font-size: 13px;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .makeup-demo-bar {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .makeup-counter {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid rgba(209, 100, 60, 0.12);
+      color: var(--accent-deep);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
     @media (max-width: 1180px) {
       .hero,
       .layout,
@@ -1408,6 +1516,7 @@
           <div class="toc">
             <a href="#user-flow">用户端原型</a>
             <a href="#poster-flow">金句海报与激励</a>
+            <a href="#makeup-flow">补卡功能</a>
             <a href="#benefit-eval">福利与测评</a>
             <a href="#admin">后台配置原型</a>
             <a href="#tech">技术实现建议</a>
@@ -1790,6 +1899,112 @@
               </div>
               <div class="footer-note">
                 技术建议：优先服务端生成海报，减少前端机型兼容与字体排版问题。
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="makeup-flow">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Makeup Feature</div>
+              <h2>补卡功能</h2>
+              <p>单独说明补卡机制，并通过交互演示“分享金句海报后领取补卡机会”的核心链路。</p>
+            </div>
+            <div class="tag-row">
+              <div class="tag">每人 3 次</div>
+              <div class="tag">分享海报领取</div>
+              <div class="tag">连续打卡兜底</div>
+            </div>
+          </div>
+
+          <div class="makeup-showcase">
+            <article class="makeup-panel">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Rule Summary</div>
+                  <div class="card-title">补卡规则说明</div>
+                </div>
+                <div class="tag">Policy</div>
+              </div>
+              <div class="bullet-list">
+                <div class="bullet">
+                  <div class="bullet-index">1</div>
+                  <div class="bullet-body">
+                    <strong>固定上限</strong>
+                    每个用户最多拥有 3 次补卡机会，用于补齐连续打卡过程中的中断日。
+                  </div>
+                </div>
+                <div class="bullet">
+                  <div class="bullet-index">2</div>
+                  <div class="bullet-body">
+                    <strong>获取方式</strong>
+                    用户分享金句海报后，可领取 1 次补卡机会，累计上限为 3 次。
+                  </div>
+                </div>
+                <div class="bullet">
+                  <div class="bullet-index">3</div>
+                  <div class="bullet-body">
+                    <strong>使用场景</strong>
+                    当某一天漏打卡时，用户可消耗补卡机会补齐记录，维持连续打卡状态。
+                  </div>
+                </div>
+              </div>
+              <div class="makeup-slots">
+                <div class="makeup-slot">
+                  <strong id="makeup-available">0</strong>
+                  <span>当前补卡机会</span>
+                </div>
+                <div class="makeup-slot">
+                  <strong>3</strong>
+                  <span>机会总上限</span>
+                </div>
+                <div class="makeup-slot">
+                  <strong>1</strong>
+                  <span>每次分享可领取</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="makeup-panel">
+              <div class="card-top">
+                <div>
+                  <div class="card-subtitle">Interactive Demo</div>
+                  <div class="card-title">分享领取补卡机会</div>
+                </div>
+                <div class="tag">Demo</div>
+              </div>
+              <div class="share-claim-card">
+                <h3>分享金句海报，领取补卡机会</h3>
+                <p>用户完成当日打卡后进入金句海报弹层，通过分享金句海报获得补卡机会。这个动作适合作为补卡权益的主要获取方式。</p>
+                <div class="makeup-steps">
+                  <div class="makeup-step">
+                    <div class="makeup-step-index">1</div>
+                    <div>
+                      <strong>完成当天打卡</strong>
+                      系统展示金句海报，进入鼓励分享的高情绪节点。
+                    </div>
+                  </div>
+                  <div class="makeup-step">
+                    <div class="makeup-step-index">2</div>
+                    <div>
+                      <strong>点击分享海报</strong>
+                      用户分享海报后，系统发放 1 次补卡机会。
+                    </div>
+                  </div>
+                  <div class="makeup-step">
+                    <div class="makeup-step-index">3</div>
+                    <div>
+                      <strong>补卡机会入账</strong>
+                      首页补卡状态与补卡板块同步更新，最多累计到 3 次。
+                    </div>
+                  </div>
+                </div>
+                <div class="makeup-demo-bar">
+                  <button class="btn btn-primary" data-action="share-achievement">分享金句海报</button>
+                  <button class="btn btn-secondary" data-action="reset-makeup">重置补卡机会</button>
+                  <div class="makeup-counter" id="makeup-inline-counter">当前补卡机会：0 / 3</div>
+                </div>
               </div>
             </article>
           </div>
@@ -2388,6 +2603,8 @@
     const taskCardTitle = document.getElementById("task-card-title");
     const taskCardDesc = document.getElementById("task-card-desc");
     const makeupBadge = document.getElementById("makeup-badge");
+    const makeupAvailable = document.getElementById("makeup-available");
+    const makeupInlineCounter = document.getElementById("makeup-inline-counter");
     state.makeupCards = 0;
     state.maxMakeupCards = 3;
 
@@ -2450,6 +2667,12 @@
 
     function updateMakeupUI() {
       makeupBadge.textContent = state.makeupCards + " / " + state.maxMakeupCards + " 次";
+      if (makeupAvailable) {
+        makeupAvailable.textContent = String(state.makeupCards);
+      }
+      if (makeupInlineCounter) {
+        makeupInlineCounter.textContent = "当前补卡机会：" + state.makeupCards + " / " + state.maxMakeupCards;
+      }
     }
 
     function setTaskDay(day) {
@@ -2545,6 +2768,11 @@
         } else {
           showToast("已触发分享动作，补卡机会已达上限 3 次。");
         }
+      }
+      if (action === "reset-makeup") {
+        state.makeupCards = 0;
+        updateMakeupUI();
+        showToast("补卡机会已重置，便于重新演示领取流程。");
       }
       if (action === "open-benefit") {
         scrollToSection("benefit-eval");
