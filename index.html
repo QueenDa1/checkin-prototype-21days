@@ -596,17 +596,17 @@
       position: absolute;
       right: 16px;
       bottom: 18px;
-      width: 74px;
-      min-height: 74px;
-      border-radius: 22px;
-      padding: 10px 8px;
-      background: linear-gradient(180deg, rgba(255,249,242,0.96), rgba(244,226,203,0.96));
+      width: 88px;
+      min-height: 110px;
+      border-radius: 28px;
+      padding: 10px 8px 12px;
+      background: linear-gradient(180deg, rgba(255,249,242,0.98), rgba(245,231,213,0.98));
       border: 1px solid rgba(209, 100, 60, 0.16);
       box-shadow: 0 14px 28px rgba(102, 63, 35, 0.18);
       display: grid;
       justify-items: center;
       align-content: center;
-      gap: 6px;
+      gap: 8px;
       text-align: center;
       color: var(--accent-deep);
       font-size: 11px;
@@ -622,13 +622,78 @@
     }
 
     .floating-consultant .qr-chip {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, #fff, #f1ddc2);
-      font-size: 18px;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      position: relative;
+      background: linear-gradient(180deg, #fff7ef, #f0d8bb);
+      border: 1px solid rgba(209, 100, 60, 0.12);
+      box-shadow: inset 0 -4px 10px rgba(182, 123, 72, 0.12);
+    }
+
+    .floating-consultant .qr-chip::before,
+    .floating-consultant .qr-chip::after {
+      content: "";
+      position: absolute;
+      background: #a55433;
+      opacity: 0.92;
+    }
+
+    .floating-consultant .qr-chip::before {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      top: 12px;
+      left: 15px;
+    }
+
+    .floating-consultant .qr-chip::after {
+      width: 30px;
+      height: 14px;
+      border-radius: 14px 14px 10px 10px;
+      bottom: 9px;
+      left: 12px;
+    }
+
+    .assistant-face {
+      position: absolute;
+      inset: 0;
+      display: block;
+    }
+
+    .assistant-face .eye {
+      position: absolute;
+      top: 24px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .assistant-face .eye.left {
+      left: 18px;
+    }
+
+    .assistant-face .eye.right {
+      right: 18px;
+    }
+
+    .assistant-face .mouth {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      width: 14px;
+      height: 7px;
+      transform: translateX(-50%);
+      border-bottom: 2px solid #fff;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .assistant-label {
+      color: var(--accent-deep);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.2;
     }
 
     .home-clickable {
@@ -1486,8 +1551,14 @@
                   </div>
 
                   <button class="floating-consultant" data-action="open-consultant">
-                    <div class="qr-chip">顾</div>
-                    <span>顾问<br>入口</span>
+                    <div class="qr-chip">
+                      <span class="assistant-face">
+                        <span class="eye left"></span>
+                        <span class="eye right"></span>
+                        <span class="mouth"></span>
+                      </span>
+                    </div>
+                    <span class="assistant-label">学习助手</span>
                   </button>
                 </div>
               </div>
@@ -2501,7 +2572,7 @@
         showToast("后台已切换到福利配置模块。");
       }
       if (action === "open-consultant") {
-        showToast("已打开顾问二维码浮窗入口，可承接咨询与转化。");
+        showToast("已打开学习助手浮窗入口，可承接咨询、陪伴与学习指引。");
       }
     });
 
