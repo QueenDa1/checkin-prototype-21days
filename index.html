@@ -1276,7 +1276,7 @@
         <div class="score-grid">
           <div class="metric">
             <strong>21</strong>
-            <span>总打卡天数，采用累计完成机制，形成最小行为闭环。</span>
+            <span>总打卡天数，采用连续完成机制，形成更强的坚持闭环。</span>
           </div>
           <div class="metric">
             <strong>6</strong>
@@ -1317,12 +1317,12 @@
         <div class="panel">
           <h2>V1 关键规则</h2>
           <ul>
-            <li>按累计打卡天数统计，不要求连续 21 天。</li>
+            <li>按连续打卡天数统计，需连续完成 21 天。</li>
             <li>每日必做为习题练习，拍照入口选填。</li>
             <li>当日首次成功提交记为有效打卡。</li>
             <li>完成当日任务后弹出金句海报用于分享。</li>
-            <li>达到指定天数自动解锁福利。</li>
-            <li>累计完成 21 天后解锁结营测评。</li>
+            <li>达到指定连续打卡天数后自动解锁福利。</li>
+            <li>连续完成 21 天后解锁结营测评。</li>
           </ul>
         </div>
 
@@ -1706,7 +1706,7 @@
                 <div class="phone-screen">
                   <div class="screen-header">
                     <span>福利中心</span>
-                    <span>累计解锁</span>
+                    <span>连续解锁</span>
                   </div>
                   <div class="mini-card" style="background:linear-gradient(180deg,#fff8ef,#f4e6d3);">
                     <strong>你的练习成果正在变现成福利</strong>
@@ -1718,8 +1718,8 @@
                     <span>后台配置</span>
                   </div>
                   <div class="status-strip">
-                    <span>当前累计打卡</span>
-                    <strong id="benefit-progress-text">13 天，距离 Day 14 福利还差 1 天</strong>
+                    <span>当前连续打卡</span>
+                    <strong id="benefit-progress-text">已连续打卡 13 天，距离 Day 14 福利还差 1 天</strong>
                   </div>
                   <div class="benefit-list" style="margin-top:10px;">
                     <div class="benefit-item is-clickable">
@@ -1878,7 +1878,7 @@
                     </div>
                     <div class="field" style="grid-column:1 / -1;">
                       <label>活动规则</label>
-                      <textarea>累计 21 天完成即结营；题目为必做；拍照入口为选填；完成后展示今日金句海报。</textarea>
+                      <textarea>连续 21 天完成即结营；题目为必做；拍照入口为选填；完成后展示今日金句海报。</textarea>
                     </div>
                   </div>
 
@@ -2051,7 +2051,7 @@
                           <div class="bullet-index">A</div>
                           <div class="bullet-body">
                             <strong>解锁条件</strong>
-                            累计完成 21 天打卡后自动开放测评入口。
+                            连续完成 21 天打卡后自动开放测评入口。
                           </div>
                         </div>
                         <div class="bullet">
@@ -2186,7 +2186,7 @@
                 <li>活动表：活动标题、banner、规则、顾问二维码、状态。</li>
                 <li>书籍表：书名、封面、描述。</li>
                 <li>题目表：题型、题干、选项、答案、解析、Day、排序。</li>
-                <li>用户打卡计划表：参与时间、累计天数、状态。</li>
+                <li>用户打卡计划表：参与时间、连续天数、状态。</li>
                 <li>用户打卡记录表：答案快照、图片 URL、得分、提交时间。</li>
                 <li>福利配置表与用户福利状态表。</li>
                 <li>金句表与海报模板关联表。</li>
@@ -2241,11 +2241,11 @@
         <button class="btn btn-secondary" data-action="close-rules">关闭</button>
       </div>
       <ul>
-        <li>采用累计 21 天打卡机制，不要求连续完成。</li>
+        <li>采用连续 21 天打卡机制，中断后需重新累计连续天数。</li>
         <li>每日习题为必做，拍照入口根据活动配置决定是否展示。</li>
         <li>当日首次提交成功记为有效打卡，并触发金句海报。</li>
-        <li>达到指定打卡天数后自动解锁对应福利。</li>
-        <li>累计完成 21 天后解锁结营测评与结果页。</li>
+        <li>达到指定连续打卡天数后自动解锁对应福利。</li>
+        <li>连续完成 21 天后解锁结营测评与结果页。</li>
       </ul>
     </div>
   </div>
@@ -2284,7 +2284,7 @@
       9: { status: "已完成回看", title: "刻意练习", desc: "Day 9 重点训练先确认对方状态再给建议的应用能力。" },
       10: { status: "已完成回看", title: "刻意练习", desc: "Day 10 通过多题型混合训练强化用户对沟通风格的识别。" },
       11: { status: "已完成回看", title: "刻意练习", desc: "Day 11 展示用户已完成的答题卡片、解析和可选拍照内容。" },
-      12: { status: "已完成回看", title: "刻意练习", desc: "Day 12 以进阶练习为主，突出历史记录和累计进度的连续性。" },
+      12: { status: "已完成回看", title: "刻意练习", desc: "Day 12 以进阶练习为主，突出历史记录和连续进度的延续性。" },
       13: { status: "今日任务", title: "刻意练习", desc: "技术主题跟随书籍章节，本日围绕“沟通风格识别”完成 4 道练习题，覆盖单选、多选、填空与媒体题干。" },
       14: { status: "待完成任务", title: "刻意练习", desc: "Day 14 将进入进阶答疑资料包解锁节点，用户完成今日练习后即可领取福利。" }
     };
@@ -2348,7 +2348,7 @@
       benefitDay14.dataset.benefitState = "unlocked";
       benefitDay14Badge.textContent = "已解锁";
       benefitDay14Badge.classList.remove("locked");
-      benefitProgressText.textContent = "14 天，Day 14 福利已解锁，可点击查看";
+      benefitProgressText.textContent = "已连续打卡 14 天，Day 14 福利已解锁，可点击查看";
       if (withToast) {
         showToast("Day 14 福利已解锁，可进入资料包查看页。");
       }
