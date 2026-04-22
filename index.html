@@ -493,6 +493,41 @@
       margin-bottom: 6px;
     }
 
+    .makeup-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fff9f2, #f8efe5);
+      border: 1px solid rgba(209, 100, 60, 0.12);
+    }
+
+    .makeup-copy strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .makeup-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .makeup-badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff1e5;
+      border: 1px solid rgba(209, 100, 60, 0.16);
+      color: var(--accent-deep);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
     .gift-track {
       margin-top: 14px;
       display: flex;
@@ -1321,6 +1356,8 @@
             <li>每日必做为习题练习，拍照入口选填。</li>
             <li>当日首次成功提交记为有效打卡。</li>
             <li>完成当日任务后弹出金句海报用于分享。</li>
+            <li>每个用户拥有 3 次补卡机会，用于补齐中断的打卡日。</li>
+            <li>补卡机会获取方式为分享活动海报，每次有效分享可获得 1 次补卡机会。</li>
             <li>达到指定连续打卡天数后自动解锁福利。</li>
             <li>连续完成 21 天后解锁结营测评。</li>
           </ul>
@@ -1438,6 +1475,13 @@
                         <div class="day today selected" data-day="13">13</div>
                         <div class="day" id="day-14" data-day="14">14</div>
                       </div>
+                    </div>
+                    <div class="makeup-card">
+                      <div class="makeup-copy">
+                        <strong>补卡机会</strong>
+                        <span>每个用户最多拥有 3 次补卡机会，分享活动海报可获得补卡次数。</span>
+                      </div>
+                      <div class="makeup-badge" id="makeup-badge">0 / 3 次</div>
                     </div>
                   </div>
 
@@ -2244,6 +2288,7 @@
         <li>采用连续 21 天打卡机制，中断后需重新累计连续天数。</li>
         <li>每日习题为必做，拍照入口根据活动配置决定是否展示。</li>
         <li>当日首次提交成功记为有效打卡，并触发金句海报。</li>
+        <li>每个用户拥有 3 次补卡机会，分享活动海报后可获得补卡次数。</li>
         <li>达到指定连续打卡天数后自动解锁对应福利。</li>
         <li>连续完成 21 天后解锁结营测评与结果页。</li>
       </ul>
@@ -2271,6 +2316,9 @@
     const taskDayStatus = document.getElementById("task-day-status");
     const taskCardTitle = document.getElementById("task-card-title");
     const taskCardDesc = document.getElementById("task-card-desc");
+    const makeupBadge = document.getElementById("makeup-badge");
+    state.makeupCards = 0;
+    state.maxMakeupCards = 3;
 
     const dayContentMap = {
       1: { status: "已完成回看", title: "刻意练习", desc: "Day 1 以“沟通观察入门”为主题，完成了基础识别练习与首日建立习惯任务。" },
@@ -2327,6 +2375,10 @@
         day14.classList.add("done");
         day14.classList.remove("today");
       }
+    }
+
+    function updateMakeupUI() {
+      makeupBadge.textContent = state.makeupCards + " / " + state.maxMakeupCards + " 次";
     }
 
     function setTaskDay(day) {
@@ -2415,7 +2467,13 @@
         showToast("草稿已暂存，便于用户稍后继续答题。");
       }
       if (action === "share-achievement") {
-        showToast("已触发分享动作，可扩展为朋友圈、微信聊天或小红书分享。");
+        if (state.makeupCards < state.maxMakeupCards) {
+          state.makeupCards += 1;
+          updateMakeupUI();
+          showToast("已完成活动海报分享，获得 1 次补卡机会。当前补卡机会：" + state.makeupCards + " / " + state.maxMakeupCards);
+        } else {
+          showToast("已触发分享动作，补卡机会已达上限 3 次。");
+        }
       }
       if (action === "open-benefit") {
         scrollToSection("benefit-eval");
@@ -2477,6 +2535,7 @@
 
     window.addEventListener("scroll", updateActiveSection, { passive: true });
     updateProgress();
+    updateMakeupUI();
     setTaskDay(13);
     updateActiveSection();
   </script>
