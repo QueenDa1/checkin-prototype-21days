@@ -1,0 +1,1070 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>带货用户画像与课程策略仪表盘</title>
+  <style>
+    :root {
+      --bg: #edf2f7;
+      --panel: #ffffff;
+      --panel-2: #f7fafc;
+      --ink: #132030;
+      --muted: #607086;
+      --line: #d8e1ea;
+      --navy: #17324d;
+      --blue: #2f6fed;
+      --teal: #0f8f83;
+      --orange: #d86a2d;
+      --violet: #6857d8;
+      --gold: #cc9b1f;
+      --danger: #c2410c;
+      --shadow: 0 18px 40px rgba(24, 43, 70, 0.08);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(47, 111, 237, 0.08), transparent 18%),
+        linear-gradient(180deg, #eef3f8 0%, #e9eff6 100%);
+    }
+
+    .page {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 20px 18px 48px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: 18px;
+      padding: 14px 18px;
+      backdrop-filter: blur(14px);
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand strong {
+      font-size: 18px;
+      color: var(--navy);
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 14px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      transition: 0.2s ease;
+    }
+
+    .nav a:hover {
+      background: #edf4ff;
+      color: var(--blue);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr 0.95fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .hero-main {
+      padding: 28px;
+      background:
+        linear-gradient(135deg, rgba(23, 50, 77, 0.96), rgba(30, 74, 113, 0.94)),
+        linear-gradient(180deg, #17324d, #254f77);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -80px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.14), transparent 65%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.86);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", "Noto Serif SC", serif;
+    }
+
+    h1 {
+      font-size: clamp(32px, 4vw, 54px);
+      line-height: 1.05;
+      max-width: 11ch;
+      margin-bottom: 14px;
+    }
+
+    .hero-main p {
+      margin: 0 0 16px;
+      max-width: 68ch;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.82);
+      font-size: 15px;
+    }
+
+    .decision-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .decision {
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .decision strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .decision span {
+      display: block;
+      line-height: 1.65;
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .hero-side {
+      padding: 18px;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 14px;
+      background: linear-gradient(180deg, #ffffff, #f7fbff);
+    }
+
+    .summary-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+
+    .summary-card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .summary-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .summary-card.alert {
+      background: #fff6ee;
+      border-color: #f3d4bf;
+    }
+
+    .summary-card.alert h3 {
+      color: var(--danger);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .kpi {
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff, #f9fbfd);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .kpi-value {
+      font-size: 34px;
+      line-height: 1;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .kpi small {
+      color: var(--muted);
+      line-height: 1.6;
+      display: block;
+    }
+
+    .section {
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 72ch;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+
+    .card h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .tag {
+      display: inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: #eaf1fb;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+
+    .tag.orange {
+      background: #fff1e8;
+      color: var(--orange);
+    }
+
+    .tag.teal {
+      background: #e7f7f4;
+      color: var(--teal);
+    }
+
+    .tag.violet {
+      background: #f0edff;
+      color: var(--violet);
+    }
+
+    .list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .list span {
+      display: block;
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .bar-chart {
+      display: grid;
+      gap: 12px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 78px;
+      gap: 12px;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .bar-track {
+      height: 14px;
+      background: #e8eef5;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), #85aef8);
+    }
+
+    .bar-fill.orange {
+      background: linear-gradient(90deg, var(--orange), #efab7c);
+    }
+
+    .bar-fill.teal {
+      background: linear-gradient(90deg, var(--teal), #71d3ca);
+    }
+
+    .bar-fill.violet {
+      background: linear-gradient(90deg, var(--violet), #b0a3ff);
+    }
+
+    .axis-note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .persona-summary {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .persona-quote {
+      padding: 22px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff, #f7fbff);
+    }
+
+    .persona-quote strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1.3;
+      color: var(--navy);
+      margin-bottom: 12px;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .persona-quote p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .persona-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .persona-mini {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+    }
+
+    .persona-mini h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .persona-mini p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .matrix-card {
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+    }
+
+    .filters {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      font-size: 14px;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+
+    .course-card {
+      display: none;
+    }
+
+    .course-card.active {
+      display: block;
+    }
+
+    .funnel {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 0.9fr;
+      gap: 16px;
+    }
+
+    .funnel-stage {
+      border-radius: 18px;
+      padding: 18px;
+      color: white;
+      min-height: 240px;
+    }
+
+    .funnel-stage h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .funnel-stage p,
+    .funnel-stage li {
+      color: rgba(255,255,255,0.9);
+      line-height: 1.75;
+    }
+
+    .funnel-stage ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    .stage-a {
+      background: linear-gradient(135deg, #22589d, #4d85d6);
+    }
+
+    .stage-b {
+      background: linear-gradient(135deg, #0f786f, #39aa9e);
+    }
+
+    .stage-c {
+      background: linear-gradient(135deg, #7a5526, #d89e4b);
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .time-card {
+      padding: 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff, #f7fbff);
+      border: 1px solid var(--line);
+    }
+
+    .time-card strong {
+      display: block;
+      font-size: 30px;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      padding: 18px 22px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1200px) {
+      .hero,
+      .split,
+      .kpi-grid,
+      .grid-4,
+      .persona-summary,
+      .timeline,
+      .funnel {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 840px) {
+      .page {
+        padding: 14px 12px 34px;
+      }
+
+      .topbar,
+      .hero,
+      .decision-strip,
+      .kpi-grid,
+      .split,
+      .persona-summary,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .matrix,
+      .timeline,
+      .funnel {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        position: static;
+      }
+
+      .bar-row {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar panel">
+      <div class="brand">
+        <strong>带货用户画像与课程策略仪表盘</strong>
+        <span>面向管理层的课程业务判断页 | 数据时间范围：2024-10-01 至 2025-06-30</span>
+      </div>
+      <nav class="nav">
+        <a href="#kpi">核心指标</a>
+        <a href="#personas">用户画像</a>
+        <a href="#course">课程矩阵</a>
+        <a href="#funnel">产品漏斗</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-main panel">
+        <span class="eyebrow">Executive Summary</span>
+        <h1>先卖问题答案，再卖系统课程</h1>
+        <p>
+          这份数据最重要的经营判断是：真正成交的不是泛心理兴趣人群，而是带着明确现实困扰来的用户。
+          他们要的不是理论，而是解释、方法和改善希望。
+        </p>
+        <p>
+          最值得优先切入的需求方向是亲子教育、情绪成长、婚姻关系、潜意识修复四条线。
+          课程结构上，建议前端用专题小课转化，中段用系统课承接，后端再切入修复营与陪跑。
+        </p>
+        <div class="decision-strip">
+          <div class="decision">
+            <strong>经营结论</strong>
+            <span>爆款驱动明显，少量头部内容贡献大比例成交，更适合复制高转化结构，不适合盲目铺量。</span>
+          </div>
+          <div class="decision">
+            <strong>用户结论</strong>
+            <span>家长、婚姻困扰者、内耗型成年人和原生家庭修复者，是最值得优先承接的四类付费人群。</span>
+          </div>
+          <div class="decision">
+            <strong>产品结论</strong>
+            <span>先做“问题解决型轻课”，再延展系统课与高客单陪跑，转化路径更顺，风险更低。</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-side panel">
+        <div class="summary-card">
+          <h3>一句话判断</h3>
+          <p>这批用户最适合卖的，不是大而全心理学课，而是围绕现实困境设计的解决型课程。</p>
+        </div>
+        <div class="summary-card alert">
+          <h3>数据风险提醒</h3>
+          <p>全量表存在 49 条重复记录，会多算 54,449.60 元成交额和 570 单订单。对外汇报时建议用去重口径。</p>
+        </div>
+        <div class="summary-card">
+          <h3>当前最适合推进的课题</h3>
+          <p>孩子不上学不听话怎么沟通、孩子躺平厌学怎么办、停止内耗提升资格感、婚姻高冲突沟通修复。</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="kpi-grid" id="kpi">
+      <div class="kpi">
+        <div class="kpi-label">去重后总成交额</div>
+        <div class="kpi-value">290.99万</div>
+        <small>来自 6,577 条视频，说明业务已具备稳定成交基础，但高度依赖头部内容。</small>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">头部 49 条贡献占比</div>
+        <div class="kpi-value">32%</div>
+        <small>爆款集中度高，复制头部内容结构比追求平均表现更重要。</small>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">有成交视频占比</div>
+        <div class="kpi-value">41.46%</div>
+        <small>超过一半视频没有成交，说明筛选“会转化的题”比泛发内容更关键。</small>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">最强内容方向</div>
+        <div class="kpi-value">亲子教育</div>
+        <small>既是最大盘，也是最适合前端小课切入的主题方向。</small>
+      </div>
+    </section>
+
+    <section class="section panel">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow" style="background:#eaf1fb;color:#2f6fed;">Commercial Signals</span>
+          <h2>需求热度与商业价值分布</h2>
+          <p>从头部带货内容看，商业价值最强的不是抽象心理话题，而是和现实关系、育儿冲突、情绪消耗直接相关的具体问题。</p>
+        </div>
+      </div>
+
+      <div class="split">
+        <div class="card">
+          <span class="tag">头部主题成交额</span>
+          <h3>四条核心课题线</h3>
+          <div class="bar-chart">
+            <div class="bar-row">
+              <div>亲子教育</div>
+              <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+              <div>48.0万</div>
+            </div>
+            <div class="bar-row">
+              <div>情绪成长</div>
+              <div class="bar-track"><div class="bar-fill teal" style="width:76.7%"></div></div>
+              <div>36.8万</div>
+            </div>
+            <div class="bar-row">
+              <div>婚姻情感</div>
+              <div class="bar-track"><div class="bar-fill orange" style="width:31.1%"></div></div>
+              <div>14.9万</div>
+            </div>
+            <div class="bar-row">
+              <div>潜意识修复</div>
+              <div class="bar-track"><div class="bar-fill violet" style="width:25.3%"></div></div>
+              <div>12.2万</div>
+            </div>
+          </div>
+          <div class="axis-note">解读：亲子教育是当前最稳的现金流题材，潜意识修复更像高客单高价值进阶方向。</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <span class="tag orange">成交语言</span>
+            <h3>最常用的触发词</h3>
+            <div class="list">
+              <span>怎么办：接住当下困境</span>
+              <span>为什么：提供新的解释框架</span>
+              <span>试试这个方法：给用户立刻可执行动作</span>
+              <span>一定要看：制造身份与场景紧迫感</span>
+            </div>
+          </div>
+          <div class="card">
+            <span class="tag teal">关键推论</span>
+            <h3>用户并不是来学习</h3>
+            <div class="list">
+              <span>他们先想知道问题为什么发生</span>
+              <span>再想知道现在具体该怎么做</span>
+              <span>最后才愿意相信长期课程有效</span>
+            </div>
+          </div>
+          <div class="card">
+            <span class="tag violet">内容评价</span>
+            <h3>不宜只看完播率</h3>
+            <p>数据上完播率与成交金额相关性很弱，更应该盯千次观看成交金额和订单产出。</p>
+          </div>
+          <div class="card">
+            <span class="tag">经营重点</span>
+            <h3>优先复制强结构</h3>
+            <p>标题和选题要持续围绕具体人群、明确痛点、给出方法承诺，而不是泛鸡汤式情绪表达。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section panel" id="personas">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow" style="background:#e7f7f4;color:#0f8f83;">Personas</span>
+          <h2>核心付费用户画像</h2>
+          <p>这部分不只是用户分类，而是对“谁在买、为什么买、适合卖什么课”的业务判断。核心结论是：用户不是来学理论，而是带着现实困扰来买答案。</p>
+        </div>
+      </div>
+
+      <div class="persona-summary">
+        <div class="persona-quote">
+          <span class="tag teal">画像总判断</span>
+          <strong>真实购买者，本质上是“问题驱动型用户”</strong>
+          <p>
+            从高带货内容看，真正会成交的用户不是泛心理学兴趣人群，而是当下正卡在具体问题里的人。
+            他们通常已经试过一些方法但没有效果，所以更容易被“为什么会这样”“我现在该怎么做”“这件事还有没有改善可能”这三类信息打动。
+          </p>
+        </div>
+
+        <div class="persona-stack">
+          <div class="persona-mini">
+            <span class="tag orange">购买动机</span>
+            <h3>先解决眼前问题</h3>
+            <p>先想止损，再想成长。先要方法，再愿意接受体系。先求改善，再考虑长期学习。</p>
+          </div>
+          <div class="persona-mini">
+            <span class="tag">产品判断</span>
+            <h3>先卖答案，再卖系统</h3>
+            <p>前端适合卖小而准的问题课，中段适合卖关系或成长系统课，后端再承接深层修复与陪跑。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-bottom: 16px;">
+        <div class="card">
+          <span class="tag orange">共性特征</span>
+          <h3>用户通常处于高焦虑状态</h3>
+          <div class="list">
+            <span>问题已经发生，而且影响生活关系</span>
+            <span>试过旧方法，但效果不稳定或无效</span>
+            <span>愿意为“有方向、有方法”的内容付费</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="tag teal">决策链路</span>
+          <h3>用户的付费顺序</h3>
+          <div class="list">
+            <span>先被问题标题击中</span>
+            <span>再被原因解释建立信任</span>
+            <span>最后被方法与结果承诺推动成交</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="tag violet">课程含义</span>
+          <h3>课程不能做成通识课</h3>
+          <div class="list">
+            <span>不能太泛，必须围绕明确困境</span>
+            <span>不能太学术，必须可执行</span>
+            <span>不能只讲理念，必须给出行动路径</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <div class="card">
+          <span class="tag orange">最大盘</span>
+          <h3>焦虑型家长</h3>
+          <p>关注厌学、躺平、不听话、拖延、沟通失效。愿意为“马上能用”的解决方法买单。</p>
+          <div class="list">
+            <span>最强痛点：孩子不上学、顶嘴、沉迷手机</span>
+            <span>购买动机：先把家庭冲突降下来</span>
+            <span>适合入口：亲子沟通短课、厌学专题课</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="tag">稳定成交</span>
+          <h3>内耗型成年人</h3>
+          <p>围绕资格感、自卑、情绪稳定、表达力、自我价值感持续消费，对成长题长期有需求。</p>
+          <div class="list">
+            <span>最强痛点：内耗、自卑、讨好、情绪不稳</span>
+            <span>购买动机：想让自己状态变好</span>
+            <span>适合入口：停止内耗课、资格感提升课</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="tag teal">关系修复</span>
+          <h3>婚姻困扰者</h3>
+          <p>在争吵、冷淡、误解和关系疲惫中消耗，希望通过课程找到更可行的沟通和修复方式。</p>
+          <div class="list">
+            <span>最强痛点：高冲突、低安全感、反复争执</span>
+            <span>购买动机：减少冲突，恢复关系秩序</span>
+            <span>适合入口：婚姻沟通课、关系修复课</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="tag violet">高客单潜力</span>
+          <h3>原生家庭修复者</h3>
+          <p>通常问题更深、意愿更强，但信任建立更慢，适合放在后端或中后段产品承接。</p>
+          <div class="list">
+            <span>最强痛点：与父母关系差、长期压抑、自我价值低</span>
+            <span>购买动机：理解根源并做深层修复</span>
+            <span>适合入口：潜意识修复课、疗愈陪跑营</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section panel" id="course">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow" style="background:#fff1e8;color:#d86a2d;">Course Matrix</span>
+          <h2>可做课程类型与建议价位</h2>
+          <p>按照用户距离成交的远近和问题的深浅，把课程拆成四类。点击切换可以看每一类适合承接什么问题、怎么卖。</p>
+        </div>
+        <div class="filters">
+          <button class="filter-btn active" data-target="course-1">问题解决型轻课</button>
+          <button class="filter-btn" data-target="course-2">关系改善型课程</button>
+          <button class="filter-btn" data-target="course-3">成长体系课</button>
+          <button class="filter-btn" data-target="course-4">高客单修复课</button>
+        </div>
+      </div>
+
+      <div class="course-card active" id="course-1">
+        <div class="matrix">
+          <div class="matrix-card">
+            <span class="tag orange">优先级最高</span>
+            <h3>问题解决型轻课</h3>
+            <p>最适合短视频转化。主题必须足够具体，用户看完要觉得“这门课就是在解决我的眼前问题”。</p>
+            <div class="list">
+              <span>建议题目：孩子不上学不听话，父母怎么沟通</span>
+              <span>建议题目：孩子躺平厌学背后的心理原因</span>
+              <span>建议题目：停止内耗，提升资格感</span>
+              <span>建议题目：婚姻冲突时怎么说才不升级</span>
+            </div>
+          </div>
+          <div class="matrix-card">
+            <h3>商业建议</h3>
+            <div class="list">
+              <span>形式：3 节短课 / 7 天训练营 / 专题直播</span>
+              <span>价格：100 以内</span>
+              <span>交付重点：少理论，多场景，多可立刻执行动作</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card" id="course-2">
+        <div class="matrix">
+          <div class="matrix-card">
+            <span class="tag teal">中段承接</span>
+            <h3>关系改善型课程</h3>
+            <p>适合已经有基础信任的用户，从“知道一些方法”升级到“真正能改善关系氛围”。</p>
+            <div class="list">
+              <span>建议题目：亲子关系修复课</span>
+              <span>建议题目：夫妻沟通与冲突降温课</span>
+              <span>建议题目：高冲突关系中的情绪稳定课</span>
+              <span>建议题目：家庭界限与关系重建课</span>
+            </div>
+          </div>
+          <div class="matrix-card">
+            <h3>商业建议</h3>
+            <div class="list">
+              <span>形式：系统课 + 作业练习 + 场景案例</span>
+              <span>价格：2000 到 3000 元</span>
+              <span>交付重点：对话示范、错误示范、作业反馈</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card" id="course-3">
+        <div class="matrix">
+          <div class="matrix-card">
+            <span class="tag">品牌建设</span>
+            <h3>成长体系课</h3>
+            <p>更适合做品牌和复购，不建议作为首次成交主力。表达重点应放在状态改善，而不是理论深度。</p>
+            <div class="list">
+              <span>建议题目：资格感与自我价值提升课</span>
+              <span>建议题目：高认知表达与沟通课</span>
+              <span>建议题目：情绪管理与内在稳定课</span>
+              <span>建议题目：停止自卑、讨好和内耗</span>
+            </div>
+          </div>
+          <div class="matrix-card">
+            <h3>商业建议</h3>
+            <div class="list">
+              <span>形式：成长营 / 阶段训练营 / 连续学习计划</span>
+              <span>价格：1 万以上</span>
+              <span>交付重点：清晰成长路径、阶段结果、复训机制</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card" id="course-4">
+        <div class="matrix">
+          <div class="matrix-card">
+            <span class="tag violet">高客单进阶</span>
+            <h3>潜意识与深层修复课</h3>
+            <p>用户问题密度高、意愿强，但需要更高信任成本，更适合后端承接或陪跑型产品。</p>
+            <div class="list">
+              <span>建议题目：原生家庭创伤与自我疗愈课</span>
+              <span>建议题目：潜意识关系修复课</span>
+              <span>建议题目：内在力量重建课</span>
+              <span>建议题目：女性自我价值与关系模式修复课</span>
+            </div>
+          </div>
+          <div class="matrix-card">
+            <h3>商业建议</h3>
+            <div class="list">
+              <span>形式：陪跑营 / 深度答疑营 / 社群项目</span>
+              <span>价格：2 万以上</span>
+              <span>交付重点：长期陪伴、反馈机制、信任建立</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section panel" id="funnel">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow" style="background:#f0edff;color:#6857d8;">Offer Ladder</span>
+          <h2>建议的产品漏斗</h2>
+          <p>课程并不适合一上来就推大课。更合理的路径是先用问题型小课成交，再承接系统解决方案，最后进入高客单陪跑。</p>
+        </div>
+      </div>
+
+      <div class="funnel">
+        <div class="funnel-stage stage-a">
+          <h3>前端引流课</h3>
+          <p>目标是让用户快速产生“这就是我现在的问题”的共鸣，并低门槛完成第一次付费。</p>
+          <ul>
+            <li>价格建议：100 以内</li>
+            <li>代表方向：厌学、躺平、内耗、婚姻冲突</li>
+            <li>核心要求：主题单一，结果明确</li>
+          </ul>
+        </div>
+
+        <div class="funnel-stage stage-b">
+          <h3>中段系统课</h3>
+          <p>目标是把用户从“知道一点”带到“真正有方法、有顺序、有练习”。</p>
+          <ul>
+            <li>价格建议：2000 到 4000 元</li>
+            <li>代表方向：亲子沟通系统课、婚姻改善课</li>
+            <li>核心要求：多案例、多场景、多作业</li>
+          </ul>
+        </div>
+
+        <div class="funnel-stage stage-c">
+          <h3>后端陪跑营</h3>
+          <p>目标是承接高意愿用户的深层问题，提供持续反馈、陪伴和更高确定性的改变体验。</p>
+          <ul>
+            <li>价格建议：1 万以上</li>
+            <li>代表方向：原生家庭疗愈营、父母成长陪跑营</li>
+            <li>核心要求：信任、陪伴、长期关系</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer panel">
+      这版页面已经改成偏“老板汇报页”的结构，适合内部过会、策略讨论和课程项目启动。
+      如果还需要，我可以继续帮你加两类内容：一类是更像仪表盘的动态数字动画与 SVG 图表，另一类是导出为适合汇报的 PPT 版式。
+    </footer>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.course-card');
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.target;
+        buttons.forEach((btn) => btn.classList.remove('active'));
+        cards.forEach((card) => card.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById(target).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
